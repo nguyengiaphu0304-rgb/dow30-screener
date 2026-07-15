@@ -1,5 +1,13 @@
 """Trustworthy, deterministic research primitives."""
 
+from .data_quality import (
+    CorporateActionPolicy,
+    DataQualityReport,
+    FixtureDescriptor,
+    build_quality_report,
+    parse_memberships,
+    parse_prices,
+)
 from .ingestion import (
     IngestionError,
     PermanentFetchError,
@@ -25,6 +33,9 @@ __version__ = "0.2.0"
 
 __all__ = [
     "DataQualityError",
+    "DataQualityReport",
+    "CorporateActionPolicy",
+    "FixtureDescriptor",
     "Membership",
     "IngestionError",
     "PermanentFetchError",
@@ -37,8 +48,11 @@ __all__ = [
     "SnapshotManifest",
     "TransientFetchError",
     "WeeklyResult",
+    "build_quality_report",
     "eligible_tickers",
     "evaluate_week",
+    "parse_memberships",
+    "parse_prices",
     "validate_memberships",
     "validate_prices",
     "validate_provenance",

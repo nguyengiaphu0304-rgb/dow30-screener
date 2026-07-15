@@ -11,3 +11,8 @@ policy, calendar, currency and lineage. Membership must represent what was knowa
 `SnapshotManifest` now records an HTTPS source, license note, UTC-aware retrieval timestamp,
 schema version, SHA-256, byte size and adjustment policy. It describes lineage, not data validity:
 domain-specific price and membership validators must still run after decoding the payload.
+
+`FixtureDescriptor` binds two CSV fixtures to their SHA-256 digests and records generation method,
+license, currency, calendar and a typed corporate-action policy. `DataQualityReport` deterministically
+summarizes validated coverage; an empty issue list means the declared checks passed, not that a
+dataset is complete or suitable for investment research.

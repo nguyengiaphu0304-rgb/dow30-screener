@@ -1,0 +1,13 @@
+{
+  "corporate_action_policy": "raw",
+  "currency": "USD",
+  "exchange_calendar": "synthetic-weekdays-only",
+  "fixture_id": "synthetic-quality-v1",
+  "generated_at": "2026-01-08T00:00:00+00:00",
+  "generation_method": "Hand-authored deterministic boundary-case fixture",
+  "license": "MIT; project-authored synthetic data",
+  "memberships_sha256": "86ad7f01c62c03ff901b45410415d04e95dc21f5071327131f1fcbd788019b73",
+  "prices_sha256": "7602fc6526019b80a3e20f8a88cde7e8b325542940861d92f091cd6cea59bfbe",
+  "schema_version": 1,
+  "source_note": "Synthetic fixture authored in this repository; not market data"
+}

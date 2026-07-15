@@ -1,0 +1,15 @@
+{
+  "benchmark": "SPY",
+  "corporate_action_policy": "raw",
+  "currency": "USD",
+  "exchange_calendar": "synthetic-weekdays-only",
+  "first_date": "2026-01-05",
+  "fixture_id": "synthetic-quality-v1",
+  "issues": [],
+  "last_date": "2026-01-07",
+  "membership_rows": 2,
+  "memberships_sha256": "86ad7f01c62c03ff901b45410415d04e95dc21f5071327131f1fcbd788019b73",
+  "price_rows": 8,
+  "prices_sha256": "7602fc6526019b80a3e20f8a88cde7e8b325542940861d92f091cd6cea59bfbe",
+  "ticker_count": 3
+}
