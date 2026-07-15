@@ -22,6 +22,11 @@ cache refresh. Serving stale data requires an explicit opt-in and is limited to 
 corruption and permanent errors always fail closed. Network transports remain adapter code rather
 than part of the deterministic domain model.
 
+The repository also ships a small MIT-licensed **synthetic** fixture plus a stable quality-report
+generator. It validates schema, checksums, benchmark coverage, membership timing and an explicit
+corporate-action policy. The fixture is test evidence only and contains no real security history.
+See the [corporate-action policy](docs/corporate-actions.md).
+
 ## Architecture
 
 `quality.py` owns the data trust boundary and point-in-time eligibility. `research.py` owns the
