@@ -1,0 +1,15 @@
+{
+  "observed_on": "2026-01-05",
+  "benchmark_return": 0.01,
+  "transaction_cost_bps": 20,
+  "memberships": [
+    {"ticker": "AAA", "valid_from": "2025-01-01", "valid_to": null},
+    {"ticker": "BBB", "valid_from": "2026-02-01", "valid_to": null},
+    {"ticker": "CCC", "valid_from": "2025-01-01", "valid_to": "2025-12-31"}
+  ],
+  "signals": [
+    {"ticker": "AAA", "score": 0.2, "forward_return": 0.04},
+    {"ticker": "BBB", "score": 0.9, "forward_return": 0.5},
+    {"ticker": "CCC", "score": 0.8, "forward_return": 0.4}
+  ]
+}
