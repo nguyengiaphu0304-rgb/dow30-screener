@@ -9,8 +9,8 @@
 
 ## v0.3 Reproducible ingestion
 
-- [ ] Versioned, checksummed source manifest and cache
-- [ ] Retry, timeout, rate-limit and stale-cache behavior
+- [x] Versioned, checksummed source manifest and cache
+- [x] Retry, timeout, rate-limit and stale-cache behavior
 - [ ] Permissively licensed price and membership fixtures
 - [ ] Corporate-action policy and data-quality report
 

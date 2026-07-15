@@ -17,6 +17,11 @@ invalid prices, missing benchmark observations, future retrieval timestamps, ove
 membership intervals, non-finite signals and invalid costs. Selection uses only information
 available on the observation date; forward returns are used solely after ranking.
 
+Its ingestion boundary adds versioned manifests, SHA-256 verification, bounded retry and atomic
+cache refresh. Serving stale data requires an explicit opt-in and is limited to transient failures;
+corruption and permanent errors always fail closed. Network transports remain adapter code rather
+than part of the deterministic domain model.
+
 ## Architecture
 
 `quality.py` owns the data trust boundary and point-in-time eligibility. `research.py` owns the
