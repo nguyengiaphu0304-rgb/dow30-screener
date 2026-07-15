@@ -10,9 +10,14 @@ from .data_quality import (
 )
 from .evaluation import (
     EvaluationPeriod,
+    ExitReturnPolicy,
+    MissingReturnPolicy,
     PeriodResult,
     SensitivityResult,
+    SymbolChangePolicy,
     UncertaintyInterval,
+    UniverseDisclosure,
+    UniverseKind,
     WalkForwardFold,
     WalkForwardReport,
     bootstrap_mean_interval,
@@ -40,15 +45,17 @@ from .quality import (
 )
 from .research import SignalObservation, WeeklyResult, evaluate_week
 
-__version__ = "0.2.0"
+__version__ = "1.0.0"
 
 __all__ = [
     "DataQualityError",
     "DataQualityReport",
     "EvaluationPeriod",
+    "ExitReturnPolicy",
     "CorporateActionPolicy",
     "FixtureDescriptor",
     "Membership",
+    "MissingReturnPolicy",
     "PeriodResult",
     "IngestionError",
     "PermanentFetchError",
@@ -56,12 +63,15 @@ __all__ = [
     "Provenance",
     "SignalObservation",
     "SensitivityResult",
+    "SymbolChangePolicy",
     "Snapshot",
     "SnapshotCache",
     "SnapshotIngestor",
     "SnapshotManifest",
     "TransientFetchError",
     "UncertaintyInterval",
+    "UniverseDisclosure",
+    "UniverseKind",
     "WalkForwardFold",
     "WalkForwardReport",
     "WeeklyResult",

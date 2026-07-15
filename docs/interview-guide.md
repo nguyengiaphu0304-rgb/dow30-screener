@@ -11,3 +11,8 @@ Walk-forward evaluation makes the information boundary inspectable: training out
 observations; non-overlapping test windows prevent double counting. Predeclared cost scenarios are
 reported together rather than selecting the most flattering result. A seeded bootstrap is useful
 for regression evidence but does not capture time-series dependence.
+
+The survivorship contract deliberately makes incomplete history unusable instead of applying an
+optimistic default. Historical evaluation requires exited members, explicit observed or imputed exit
+returns, mapped symbol changes and fail-closed missing outcomes. The release demo chooses a synthetic
+universe, where those historical concepts are explicitly not applicable.

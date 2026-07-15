@@ -14,3 +14,6 @@ files plus atomic replacement; a caller must explicitly opt into stale data afte
 or validates chronological folds, tunes portfolio size only on training dates, evaluates later test
 dates against benchmark and equal-weight baselines, and emits every predeclared cost scenario. The
 stable JSON report binds results to fixture checksums rather than an unverified file path.
+The report also binds a digest of the exact signal/outcome observations and requires a typed
+universe disclosure. Historical disclosures fail closed without exited-member coverage, exit-return
+treatment, symbol mapping and a fail-closed missing-return policy.
