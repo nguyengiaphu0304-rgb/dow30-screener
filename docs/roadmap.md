@@ -16,6 +16,7 @@
 
 ## v1.0 Research release
 
-- [ ] Walk-forward evaluation and honest baseline
-- [ ] Survivorship/delisting treatment, uncertainty and sensitivity analysis
-- [ ] Reproducible report generated only from verified snapshots
+- [x] Walk-forward evaluation and honest baseline
+- [x] Uncertainty intervals and predeclared transaction-cost sensitivity analysis
+- [x] Reproducible report generated only from verified snapshots
+- [ ] Document survivorship/delisting policy and package a verified release
