@@ -9,3 +9,8 @@ repeatable and independent of a data vendor. Legacy scripts remain isolated unti
 `ingestion.py` accepts a transport interface, so HTTP behavior is separated from snapshot policy.
 It verifies source metadata, payload size and SHA-256 on every cache read. Refreshes use temporary
 files plus atomic replacement; a caller must explicitly opt into stale data after transient failure.
+
+`evaluation.py` consumes validated domain objects plus a clean `DataQualityReport`. It constructs
+or validates chronological folds, tunes portfolio size only on training dates, evaluates later test
+dates against benchmark and equal-weight baselines, and emits every predeclared cost scenario. The
+stable JSON report binds results to fixture checksums rather than an unverified file path.

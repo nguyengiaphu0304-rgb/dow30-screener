@@ -27,10 +27,17 @@ generator. It validates schema, checksums, benchmark coverage, membership timing
 corporate-action policy. The fixture is test evidence only and contains no real security history.
 See the [corporate-action policy](docs/corporate-actions.md).
 
+The walk-forward evaluator adds explicit expanding-window folds, training-only portfolio-size
+selection, benchmark and equal-weight baselines, predeclared transaction-cost sensitivity, and a
+seeded bootstrap interval. Its deterministic JSON report is accepted only with a clean quality
+report and includes the verified fixture digests. Synthetic results demonstrate correctness, not
+historical returns.
+
 ## Architecture
 
 `quality.py` owns the data trust boundary and point-in-time eligibility. `research.py` owns the
-small, auditable weekly calculation. Network ingestion and legacy notebooks stay outside the
+small, auditable weekly calculation. `evaluation.py` owns chronological folds, baselines,
+uncertainty and stable reporting. Network ingestion and legacy notebooks stay outside the
 domain core. See [architecture](docs/architecture.md), [data model](docs/data-model.md),
 [threat model](docs/threat-model.md), and [ADR 001](docs/adr/001-trustworthy-foundation.md).
 
@@ -54,6 +61,7 @@ Tests use synthetic fixtures and require no network. To run old exploratory scri
 
 ## Limitations and roadmap
 
-No verified point-in-time Dow membership or licensed price snapshot ships yet. Corporate actions,
-delistings, taxes, slippage, uncertainty and walk-forward parameter selection are not fully
-modeled. See the [roadmap](docs/roadmap.md) and [interview guide](docs/interview-guide.md).
+No verified historical Dow membership or real price snapshot ships. The included fixture is
+project-authored synthetic data. Delistings, symbol changes, taxes, real exchange calendars,
+serial dependence and vendor corrections are not fully modeled. See the [roadmap](docs/roadmap.md)
+and [interview guide](docs/interview-guide.md).

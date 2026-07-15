@@ -16,3 +16,7 @@ domain-specific price and membership validators must still run after decoding th
 license, currency, calendar and a typed corporate-action policy. `DataQualityReport` deterministically
 summarizes validated coverage; an empty issue list means the declared checks passed, not that a
 dataset is complete or suitable for investment research.
+
+`EvaluationPeriod` groups same-date signals with a required benchmark outcome. `WalkForwardFold`
+contains explicit training and test dates. `WalkForwardReport` binds scenario and uncertainty
+results to the quality report's fixture ID and input SHA-256 digests.
