@@ -8,13 +8,29 @@ from dow30_screener import (
     DataQualityError,
     DataQualityReport,
     EvaluationPeriod,
+    ExitReturnPolicy,
     Membership,
+    MissingReturnPolicy,
     SignalObservation,
+    SymbolChangePolicy,
+    UniverseDisclosure,
+    UniverseKind,
     WalkForwardFold,
     bootstrap_mean_interval,
     build_walk_forward_report,
     expanding_window_folds,
 )
+
+
+def _disclosure() -> UniverseDisclosure:
+    return UniverseDisclosure(
+        universe_kind=UniverseKind.SYNTHETIC,
+        includes_exited_members=False,
+        exit_return_policy=ExitReturnPolicy.NOT_APPLICABLE,
+        symbol_change_policy=SymbolChangePolicy.NOT_APPLICABLE,
+        missing_return_policy=MissingReturnPolicy.FAIL_CLOSED,
+        methodology_note="Project-authored deterministic observations; no historical securities.",
+    )
 
 
 def _period(day: date, winner: str = "AAA", *, benchmark: float = 0.005) -> EvaluationPeriod:
@@ -82,13 +98,16 @@ def test_too_few_periods_fail_closed() -> None:
 def test_report_is_deterministic_and_binds_verified_lineage() -> None:
     periods, memberships, quality, folds = _inputs()
     kwargs = {
+        "observations_sha256": "c" * 64,
         "candidate_top_k": (1, 2, 3),
         "transaction_cost_scenarios_bps": (0.0, 20.0),
         "bootstrap_samples": 100,
         "seed": 7,
     }
-    first = build_walk_forward_report(periods, memberships, quality, folds, **kwargs)
-    second = build_walk_forward_report(periods, memberships, quality, folds, **kwargs)
+    first = build_walk_forward_report(periods, memberships, quality, _disclosure(), folds, **kwargs)
+    second = build_walk_forward_report(
+        periods, memberships, quality, _disclosure(), folds, **kwargs
+    )
     assert first.to_json() == second.to_json()
     assert first.fixture_id == quality.fixture_id
     assert first.prices_sha256 == "a" * 64
@@ -109,7 +128,9 @@ def test_parameter_selection_never_uses_future_test_outcome() -> None:
         changed,
         memberships,
         quality,
+        _disclosure(),
         folds[:1],
+        observations_sha256="c" * 64,
         candidate_top_k=(1, 3),
         transaction_cost_scenarios_bps=(0.0,),
         bootstrap_samples=20,
@@ -124,7 +145,9 @@ def test_equal_weight_baseline_and_costs_are_explicit() -> None:
         periods,
         memberships,
         quality,
+        _disclosure(),
         folds[:1],
+        observations_sha256="c" * 64,
         candidate_top_k=(1,),
         transaction_cost_scenarios_bps=(400.0,),
         bootstrap_samples=20,
@@ -169,7 +192,9 @@ def test_overlapping_or_leaking_folds_are_rejected() -> None:
             periods,
             memberships,
             quality,
+            _disclosure(),
             leaking,
+            observations_sha256="c" * 64,
             candidate_top_k=(1,),
             transaction_cost_scenarios_bps=(0.0,),
         )
@@ -182,7 +207,9 @@ def test_overlapping_or_leaking_folds_are_rejected() -> None:
             periods,
             memberships,
             quality,
+            _disclosure(),
             overlapping,
+            observations_sha256="c" * 64,
             candidate_top_k=(1,),
             transaction_cost_scenarios_bps=(0.0,),
         )
@@ -196,7 +223,9 @@ def test_dirty_or_invalid_lineage_fails_closed() -> None:
             periods,
             memberships,
             dirty,
+            _disclosure(),
             folds,
+            observations_sha256="c" * 64,
             candidate_top_k=(1,),
             transaction_cost_scenarios_bps=(0.0,),
         )
@@ -206,7 +235,9 @@ def test_dirty_or_invalid_lineage_fails_closed() -> None:
             periods,
             memberships,
             invalid_digest,
+            _disclosure(),
             folds,
+            observations_sha256="c" * 64,
             candidate_top_k=(1,),
             transaction_cost_scenarios_bps=(0.0,),
         )
@@ -219,7 +250,9 @@ def test_empty_eligible_universe_and_nonfinite_benchmark_fail_closed() -> None:
             periods,
             [Membership("ZZZ", periods[0].observed_on)],
             quality,
+            _disclosure(),
             folds,
+            observations_sha256="c" * 64,
             candidate_top_k=(1,),
             transaction_cost_scenarios_bps=(0.0,),
         )
@@ -229,7 +262,60 @@ def test_empty_eligible_universe_and_nonfinite_benchmark_fail_closed() -> None:
             invalid,
             [Membership("AAA", periods[0].observed_on)],
             quality,
+            _disclosure(),
             folds,
+            observations_sha256="c" * 64,
+            candidate_top_k=(1,),
+            transaction_cost_scenarios_bps=(0.0,),
+        )
+
+
+@pytest.mark.parametrize(
+    "disclosure,match",
+    [
+        (replace(_disclosure(), methodology_note=" "), "methodology"),
+        (replace(_disclosure(), includes_exited_members=True), "synthetic"),
+        (replace(_disclosure(), missing_return_policy=MissingReturnPolicy.ZERO), "fail closed"),
+        (
+            UniverseDisclosure(
+                universe_kind=UniverseKind.POINT_IN_TIME_HISTORICAL,
+                includes_exited_members=False,
+                exit_return_policy=ExitReturnPolicy.UNAVAILABLE,
+                symbol_change_policy=SymbolChangePolicy.UNAVAILABLE,
+                missing_return_policy=MissingReturnPolicy.FAIL_CLOSED,
+                methodology_note="Incomplete historical universe.",
+            ),
+            "exited members",
+        ),
+    ],
+)
+def test_universe_disclosure_rejects_survivorship_shortcuts(
+    disclosure: UniverseDisclosure, match: str
+) -> None:
+    periods, memberships, quality, folds = _inputs()
+    with pytest.raises(DataQualityError, match=match):
+        build_walk_forward_report(
+            periods,
+            memberships,
+            quality,
+            disclosure,
+            folds,
+            observations_sha256="c" * 64,
+            candidate_top_k=(1,),
+            transaction_cost_scenarios_bps=(0.0,),
+        )
+
+
+def test_observation_lineage_is_required() -> None:
+    periods, memberships, quality, folds = _inputs()
+    with pytest.raises(DataQualityError, match="observations"):
+        build_walk_forward_report(
+            periods,
+            memberships,
+            quality,
+            _disclosure(),
+            folds,
+            observations_sha256="bad",
             candidate_top_k=(1,),
             transaction_cost_scenarios_bps=(0.0,),
         )

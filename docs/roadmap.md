@@ -19,4 +19,7 @@
 - [x] Walk-forward evaluation and honest baseline
 - [x] Uncertainty intervals and predeclared transaction-cost sensitivity analysis
 - [x] Reproducible report generated only from verified snapshots
-- [ ] Document survivorship/delisting policy and package a verified release
+- [x] Document survivorship/delisting policy and package a verified release candidate
+
+Version 1.0 is feature-complete. Publishing the verified `v1.0.0` tag and GitHub Release is the
+remaining distribution step.

@@ -33,6 +33,10 @@ seeded bootstrap interval. Its deterministic JSON report is accepted only with a
 report and includes the verified fixture digests. Synthetic results demonstrate correctness, not
 historical returns.
 
+Every report now carries a typed [survivorship disclosure](docs/survivorship-policy.md) and a digest
+of the exact evaluation observations. Historical inputs fail closed unless they include exited
+members, exit-return treatment and mapped symbol changes. The bundled demo is explicitly synthetic.
+
 ## Architecture
 
 `quality.py` owns the data trust boundary and point-in-time eligibility. `research.py` owns the
@@ -54,6 +58,8 @@ pytest
 python -m build
 python -m pip check
 pip-audit
+dow30-screener-demo --output /tmp/walk-forward-report.json
+diff -u docs/demo/walk-forward-report.json /tmp/walk-forward-report.json
 ```
 
 Tests use synthetic fixtures and require no network. To run old exploratory scripts, install
@@ -65,3 +71,7 @@ No verified historical Dow membership or real price snapshot ships. The included
 project-authored synthetic data. Delistings, symbol changes, taxes, real exchange calendars,
 serial dependence and vendor corrections are not fully modeled. See the [roadmap](docs/roadmap.md)
 and [interview guide](docs/interview-guide.md).
+
+Release evidence and unperformed checks are listed in the
+[v1.0 checklist](docs/release-checklist.md). Release notes are in
+[`docs/releases/v1.0.0.md`](docs/releases/v1.0.0.md).

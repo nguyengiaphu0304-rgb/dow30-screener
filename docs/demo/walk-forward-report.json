@@ -1,0 +1,174 @@
+{
+  "candidate_top_k": [
+    1,
+    2,
+    3
+  ],
+  "fixture_id": "dow30-screener-release-demo-v1",
+  "limitations": [
+    "Synthetic fixtures are test evidence, not historical Dow performance.",
+    "Delistings, symbol changes, taxes and vendor corrections are not modeled.",
+    "This educational report is not financial advice or production-trading evidence."
+  ],
+  "memberships_sha256": "cd92796c87ebdea24033733ea0f35247d5b3d34e0d9be68e1d9ba9da611b97a2",
+  "observations_sha256": "ef55998f4f8fb872748ee7000f3630804324745f25e1186155e5e56d3f2934fa",
+  "prices_sha256": "1af04af7d1a7a66a34ace612b64700f2292bbb8439c120d340448d5f4808c84f",
+  "scenarios": [
+    {
+      "mean_benchmark_return": 0.00375,
+      "mean_equal_weight_return": 0.00775,
+      "mean_excess_return": 0.0045,
+      "mean_strategy_return": 0.00825,
+      "periods": [
+        {
+          "benchmark_return": 0.004,
+          "equal_weight_net_return": 0.006333333333,
+          "excess_return": 0.013,
+          "observed_on": "2025-01-31",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.017
+        },
+        {
+          "benchmark_return": 0.007,
+          "equal_weight_net_return": 0.009666666667,
+          "excess_return": -0.001,
+          "observed_on": "2025-02-07",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.006
+        },
+        {
+          "benchmark_return": 0.001,
+          "equal_weight_net_return": 0.008666666667,
+          "excess_return": -0.005,
+          "observed_on": "2025-02-14",
+          "selected_top_k": 1,
+          "strategy_net_return": -0.004
+        },
+        {
+          "benchmark_return": 0.003,
+          "equal_weight_net_return": 0.006333333333,
+          "excess_return": 0.011,
+          "observed_on": "2025-02-21",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.014
+        }
+      ],
+      "transaction_cost_bps": 0.0,
+      "uncertainty": {
+        "bootstrap_samples": 500,
+        "confidence_level": 0.9,
+        "estimate": 0.0045,
+        "lower": -0.001,
+        "seed": 2026,
+        "upper": 0.0115
+      }
+    },
+    {
+      "mean_benchmark_return": 0.00375,
+      "mean_equal_weight_return": 0.00675,
+      "mean_excess_return": 0.0035,
+      "mean_strategy_return": 0.00725,
+      "periods": [
+        {
+          "benchmark_return": 0.004,
+          "equal_weight_net_return": 0.005333333333,
+          "excess_return": 0.012,
+          "observed_on": "2025-01-31",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.016
+        },
+        {
+          "benchmark_return": 0.007,
+          "equal_weight_net_return": 0.008666666667,
+          "excess_return": -0.002,
+          "observed_on": "2025-02-07",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.005
+        },
+        {
+          "benchmark_return": 0.001,
+          "equal_weight_net_return": 0.007666666667,
+          "excess_return": -0.006,
+          "observed_on": "2025-02-14",
+          "selected_top_k": 1,
+          "strategy_net_return": -0.005
+        },
+        {
+          "benchmark_return": 0.003,
+          "equal_weight_net_return": 0.005333333333,
+          "excess_return": 0.01,
+          "observed_on": "2025-02-21",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.013
+        }
+      ],
+      "transaction_cost_bps": 10.0,
+      "uncertainty": {
+        "bootstrap_samples": 500,
+        "confidence_level": 0.9,
+        "estimate": 0.0035,
+        "lower": -0.004,
+        "seed": 2027,
+        "upper": 0.0105
+      }
+    },
+    {
+      "mean_benchmark_return": 0.00375,
+      "mean_equal_weight_return": 0.00525,
+      "mean_excess_return": 0.002,
+      "mean_strategy_return": 0.00575,
+      "periods": [
+        {
+          "benchmark_return": 0.004,
+          "equal_weight_net_return": 0.003833333333,
+          "excess_return": 0.0105,
+          "observed_on": "2025-01-31",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.0145
+        },
+        {
+          "benchmark_return": 0.007,
+          "equal_weight_net_return": 0.007166666667,
+          "excess_return": -0.0035,
+          "observed_on": "2025-02-07",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.0035
+        },
+        {
+          "benchmark_return": 0.001,
+          "equal_weight_net_return": 0.006166666667,
+          "excess_return": -0.0075,
+          "observed_on": "2025-02-14",
+          "selected_top_k": 1,
+          "strategy_net_return": -0.0065
+        },
+        {
+          "benchmark_return": 0.003,
+          "equal_weight_net_return": 0.003833333333,
+          "excess_return": 0.0085,
+          "observed_on": "2025-02-21",
+          "selected_top_k": 1,
+          "strategy_net_return": 0.0115
+        }
+      ],
+      "transaction_cost_bps": 25.0,
+      "uncertainty": {
+        "bootstrap_samples": 500,
+        "confidence_level": 0.9,
+        "estimate": 0.002,
+        "lower": -0.0045,
+        "seed": 2028,
+        "upper": 0.0085
+      }
+    }
+  ],
+  "schema_version": 1,
+  "universe_disclosure": {
+    "exit_return_policy": "not_applicable",
+    "includes_exited_members": false,
+    "methodology_note": "Project-authored synthetic universe; no historical constituents, exits, or symbols.",
+    "missing_return_policy": "fail_closed",
+    "symbol_change_policy": "not_applicable",
+    "universe_kind": "synthetic"
+  }
+}

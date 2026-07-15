@@ -4,16 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dow30-screener"
-version = "0.2.0"
+version = "1.0.0"
 description = "A provenance-aware educational equity research toolkit"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [{ name = "Nguyen Gia Phu" }]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
 ]
+
+[project.scripts]
+dow30-screener-demo = "dow30_screener.demo:main"
 
 [project.optional-dependencies]
 legacy = [

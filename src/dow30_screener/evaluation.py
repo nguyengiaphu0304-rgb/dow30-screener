@@ -6,6 +6,7 @@ import json
 import random
 from dataclasses import asdict, dataclass
 from datetime import date
+from enum import StrEnum
 from math import isfinite
 
 from .data_quality import DataQualityReport
@@ -18,6 +19,61 @@ class EvaluationPeriod:
     observed_on: date
     signals: tuple[SignalObservation, ...]
     benchmark_return: float
+
+
+class UniverseKind(StrEnum):
+    SYNTHETIC = "synthetic"
+    POINT_IN_TIME_HISTORICAL = "point_in_time_historical"
+
+
+class ExitReturnPolicy(StrEnum):
+    NOT_APPLICABLE = "not_applicable"
+    OBSERVED = "observed"
+    IMPUTED = "imputed"
+    UNAVAILABLE = "unavailable"
+
+
+class SymbolChangePolicy(StrEnum):
+    NOT_APPLICABLE = "not_applicable"
+    MAPPED = "mapped"
+    UNAVAILABLE = "unavailable"
+
+
+class MissingReturnPolicy(StrEnum):
+    FAIL_CLOSED = "fail_closed"
+    ZERO = "zero"
+
+
+@dataclass(frozen=True, slots=True)
+class UniverseDisclosure:
+    universe_kind: UniverseKind
+    includes_exited_members: bool
+    exit_return_policy: ExitReturnPolicy
+    symbol_change_policy: SymbolChangePolicy
+    missing_return_policy: MissingReturnPolicy
+    methodology_note: str
+
+    def validate(self) -> None:
+        if not self.methodology_note.strip():
+            raise DataQualityError("universe disclosure methodology note is required")
+        if self.missing_return_policy is not MissingReturnPolicy.FAIL_CLOSED:
+            raise DataQualityError("missing returns must fail closed")
+        if self.universe_kind is UniverseKind.SYNTHETIC:
+            if self.includes_exited_members:
+                raise DataQualityError("synthetic universe cannot claim historical exited members")
+            if self.exit_return_policy is not ExitReturnPolicy.NOT_APPLICABLE:
+                raise DataQualityError(
+                    "synthetic universe exit-return policy must be not_applicable"
+                )
+            if self.symbol_change_policy is not SymbolChangePolicy.NOT_APPLICABLE:
+                raise DataQualityError("synthetic universe symbol policy must be not_applicable")
+            return
+        if not self.includes_exited_members:
+            raise DataQualityError("historical universe must include exited members")
+        if self.exit_return_policy not in (ExitReturnPolicy.OBSERVED, ExitReturnPolicy.IMPUTED):
+            raise DataQualityError("historical universe requires an explicit exit-return treatment")
+        if self.symbol_change_policy is not SymbolChangePolicy.MAPPED:
+            raise DataQualityError("historical universe requires mapped symbol changes")
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,6 +119,8 @@ class WalkForwardReport:
     fixture_id: str
     prices_sha256: str
     memberships_sha256: str
+    observations_sha256: str
+    universe_disclosure: UniverseDisclosure
     candidate_top_k: tuple[int, ...]
     scenarios: tuple[SensitivityResult, ...]
     limitations: tuple[str, ...]
@@ -72,7 +130,18 @@ class WalkForwardReport:
         for scenario in value["scenarios"]:
             for period in scenario["periods"]:
                 period["observed_on"] = period["observed_on"].isoformat()
-        return json.dumps(value, indent=2, sort_keys=True) + "\n"
+        return json.dumps(_normalize_numbers(value), indent=2, sort_keys=True) + "\n"
+
+
+def _normalize_numbers(value: object) -> object:
+    if isinstance(value, float):
+        rounded = round(value, 12)
+        return 0.0 if rounded == 0 else rounded
+    if isinstance(value, dict):
+        return {str(key): _normalize_numbers(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_normalize_numbers(item) for item in value]
+    return value
 
 
 def expanding_window_folds(
@@ -204,8 +273,10 @@ def build_walk_forward_report(
     periods: tuple[EvaluationPeriod, ...],
     memberships: list[Membership],
     quality_report: DataQualityReport,
+    universe_disclosure: UniverseDisclosure,
     folds: tuple[WalkForwardFold, ...],
     *,
+    observations_sha256: str,
     candidate_top_k: tuple[int, ...],
     transaction_cost_scenarios_bps: tuple[float, ...],
     confidence_level: float = 0.95,
@@ -215,6 +286,11 @@ def build_walk_forward_report(
     indexed = _validate_periods(periods)
     dates = set(indexed)
     _validate_lineage(quality_report, dates)
+    universe_disclosure.validate()
+    if len(observations_sha256) != 64 or any(
+        char not in "0123456789abcdef" for char in observations_sha256
+    ):
+        raise DataQualityError("evaluation observations require valid SHA-256 lineage")
     _validate_folds(folds, dates)
     if not candidate_top_k or any(value <= 0 for value in candidate_top_k):
         raise DataQualityError("candidate top_k values must be positive")
@@ -288,6 +364,8 @@ def build_walk_forward_report(
         fixture_id=quality_report.fixture_id,
         prices_sha256=quality_report.prices_sha256,
         memberships_sha256=quality_report.memberships_sha256,
+        observations_sha256=observations_sha256,
+        universe_disclosure=universe_disclosure,
         candidate_top_k=candidate_top_k,
         scenarios=tuple(scenarios),
         limitations=(
